@@ -10,7 +10,7 @@ const loginRouter = express.Router()
 loginRouter.post('/', async (request, response) => {
   const body = request.body
 
-  const user = await User.findOne({ userName: body.userName })
+  const user = await User.findOne({ username: body.username })
   const passwordCorrect = user === null
     ? false
     : await compare(body.password, user.passwordHash)
@@ -22,7 +22,7 @@ loginRouter.post('/', async (request, response) => {
   }
 
   const userForToken: UserForToken = {
-    userName: user.userName,
+    username: user.username,
     id: user._id,
   }
 
@@ -30,7 +30,7 @@ loginRouter.post('/', async (request, response) => {
 
   response
     .status(200)
-    .send({ token, username: user.userName, name: user.name })
+    .send({ token, username: user.username, name: user.name })
 })
 
 export default loginRouter

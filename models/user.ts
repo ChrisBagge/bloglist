@@ -3,7 +3,7 @@ import { User } from '../interfaces/User'
 import mongooseUniqueValidator from 'mongoose-unique-validator'
 
 const userSchema = new Schema<User>({
-  userName: {
+  username: {
     type: String,
     unique: true
   },

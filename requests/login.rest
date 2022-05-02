@@ -2,10 +2,9 @@
 post http://localhost:3003/api/login
 Content-Type: application/json
 
-
 {
-  "userName" : "Chris2",
-  "password" : "123456"
+  "username" : "ChristBagge",
+  "password" : "test"
 }
 ###
 post http://localhost:3003/api/blogs
@@ -14,10 +13,20 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkNoc
 
 {
     "title": "hejsalejsa",
-    "author": "Chris GG",
+    "author": "test delete",
     "URL": "example.cominn",
     "likes": 5
 }
 ###
 GET http://localhost:3003/api/users
+
+###
+DELETE http://localhost:3003/api/blogs/626836397234d55c7c8638cd
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6IkNocmlzQmFnZ2UiLCJpZCI6IjYyNjg3ZjViNDM3MjA2NmMwMjMxNjgzOCIsImlhdCI6MTY1MTAxNTU1Mn0.CUnVBB07HkN8txW98ZVjNrVZ61GUICvy-z3XQHHVpIo
+
+###
+GET http://localhost:3003/api/blogs
+//Content-Type: application/json
+//Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkNocmlzMiIsImlkIjoiNjI1ZWRhMjg2ZjE4Y2QwOTc0Njk2MTNiIiwiaWF0IjoxNjUwMzgzNDQ1fQ.6xVWbKrQkbeSyp_9Kw3KTx20ogNMoAxEvZYTdSG5tXk
 

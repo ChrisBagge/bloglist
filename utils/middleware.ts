@@ -3,9 +3,8 @@ import express from 'express'
 
 import logger from './logger'
 import config from './config'
-import { User as iUser, UserForToken } from '../interfaces/User'
+import { UserForToken } from '../interfaces/User'
 import User from '../models/user'
-import { CallbackError, HydratedDocument } from 'mongoose'
 
 const requestLogger = (request: express.Request, _response: express.Response, next: express.NextFunction) => {
   logger.info('Method:', request.method)
@@ -33,7 +32,6 @@ const unknownEndpoint = (_request: express.Request, response: express.Response) 
 }
 
 const tokenExtractor = (request: express.Request, _response: express.Response, next: express.NextFunction) => {
-
   const authorization: string = request.get('authorization') as string
   if (authorization && authorization.toLowerCase().startsWith('bearer')) {
     request.token = authorization.substring(7)
@@ -45,14 +43,13 @@ const tokenExtractor = (request: express.Request, _response: express.Response, n
 
 const userExtractor = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
   try {
-
     const decodedToken = verify(request.token, config.SECRET) as UserForToken
     const user = await User.findById(decodedToken.id).exec()
     if (user)
       request.userId = user.id
   }
-  catch (e) {
-    console.log(e)
+  catch (e)
+  {
     next(e)
   }
   next()

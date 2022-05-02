@@ -17,12 +17,12 @@ usersRouter.post('/', async (request: Request, response) => {
     }
   */
 
-  const { userName, name, password, blogs }: { userName: string, name: string, password: string, blogs: Types.ObjectId[] } = body
+  const { username, name, password, blogs }: { username: string, name: string, password: string, blogs: Types.ObjectId[] } = body
 
-  if (userName.length < 3 || password.length < 3)
+  if (username.length < 3 || password.length < 3)
     return response.status(400).json({ error: 'user name and password must be longer than 3 characters' })
 
-  const existingUser = await User.findOne({ userName })
+  const existingUser = await User.findOne({ username })
   if (existingUser) {
     return response.status(400).json({
       error: 'username must be unique'
@@ -34,7 +34,7 @@ usersRouter.post('/', async (request: Request, response) => {
 
   const user = new User<IUser>({
     blogs: blogs,
-    userName: userName,
+    username: username,
     name: name,
     passwordHash,
 

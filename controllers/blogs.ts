@@ -4,6 +4,7 @@ import User from '../models/user'
 import { Blog as iBlog } from '../interfaces/IBlog'
 import { CallbackError, HydratedDocument } from 'mongoose'
 import { User as iUser } from '../interfaces/User'
+import middleware from '../utils/middleware'
 
 const blogsRouter = express.Router()
 
@@ -12,7 +13,7 @@ blogsRouter.get('/', async (_request, response) => {
   response.json(blogs)
 })
 
-blogsRouter.post('/', async (request, response, next) => {
+blogsRouter.post('/', middleware.userExtractor, async (request, response, next) => {
   const body = request.body
 
   User.findById(request.userId, async (err: CallbackError, user: HydratedDocument<iUser>) => {
@@ -41,14 +42,30 @@ blogsRouter.post('/', async (request, response, next) => {
   })
 })
 
-blogsRouter.delete('/:id', (request, response, next) => {
-  Blog.findById(request.body._id, (err: CallbackError, blog: HydratedDocument<iBlog>) => {
-    if (err) {
-      console.log(err)
-    } else {
-      blog.user?.toString()
+blogsRouter.delete('/:id', async (request, response, next) => {
+  try {
+    const blogToDelete = await Blog.findById(request.params.id).exec()
+    if (blogToDelete) {
+      if (blogToDelete.user?.toString() === request.userId.toString()) {
+        Blog.findByIdAndDelete(request.params.id, function (err: CallbackError, docs: HydratedDocument<iBlog>) {
+          if (err)
+            next(err)
+          else {
+            console.log('Deleted : ', docs)
+            response.status(204).end()
+          }
+        })
+      }
+      else
+        response.status(401).json('user not authorized')
     }
-  })
+    else
+      response.json('blog not found')
+  }
+  catch (err) {
+    next(err)
+  }
+
 })
 
 export default blogsRouter

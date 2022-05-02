@@ -2,12 +2,12 @@ import { Types } from 'mongoose'
 
 export interface User {
   blogs: Types.ObjectId[],
-  userName: string,
+  username: string,
   name: string,
   passwordHash: string
 }
 
 export interface UserForToken {
-  userName: string,
+  username: string,
   id: Types.ObjectId
 }
